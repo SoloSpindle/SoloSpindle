@@ -1,0 +1,15 @@
+import pandas as pd
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from collections import Counter
+
+def analyze_text(csv_file):
+    df = pd.read_csv(csv_file)
+    stop_words = set(stopwords.words('english'))
+    df['tokens'] = df['grievance_text'].apply(lambda x: [word for word in word_tokenize(x.lower()) if word.isalnum() and word not in stop_words])
+    all_tokens = [token for sublist in df['tokens'] for token in sublist]
+    word_freq = Counter(all_tokens)
+    print(word_freq.most_common(10))
+
+# Usage
+analyze_text('grievances.csv')
